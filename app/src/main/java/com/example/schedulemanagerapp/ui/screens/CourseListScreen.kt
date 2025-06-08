@@ -11,7 +11,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -19,7 +18,6 @@ import com.example.schedulemanagerapp.viewmodel.ScheduleViewModel
 import com.example.schedulemanagerapp.ui.components.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
-
 @Composable
 fun CourseListScreen(
     navController: NavController,
@@ -33,24 +31,28 @@ fun CourseListScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Courses") }
-            )
+            TopAppBar(title = { Text("Courses") })
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(Routes.ADD_COURSE)
-            }) {
-                Icon(Icons.Default.Add, contentDescription = "Add Course")
+            Row(modifier = Modifier.padding(16.dp)) {
+                FloatingActionButton(
+                    onClick = { navController.navigate(Routes.ADD_COURSE) },
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add Course")
+                }
+                FloatingActionButton(
+                    onClick = { navController.navigate(Routes.ADD_TEST) }
+                ) {
+                    Text("Test")
+                }
             }
         }
-    )
-    { padding ->
+    ) { padding ->
         Column(modifier = Modifier
             .padding(padding)
-            .fillMaxSize()
-            .padding(16.dp)) {
-
+            .padding(16.dp)
+            .fillMaxSize()) {
             LazyColumn {
                 items(courses) { course ->
                     Card(
@@ -63,6 +65,15 @@ fun CourseListScreen(
                             Text(text = course.code, style = MaterialTheme.typography.titleMedium)
                             Text(text = course.name, style = MaterialTheme.typography.bodyLarge)
                             Text(text = "Instructor: ${course.teacher}", style = MaterialTheme.typography.bodySmall)
+                            Row(modifier = Modifier.padding(top = 8.dp)) {
+                                TextButton(onClick = {
+                                    navController.navigate("assignment_list/${course.code}")
+                                }) { Text("Assignments") }
+                                Spacer(modifier = Modifier.width(8.dp))
+                                TextButton(onClick = {
+                                    navController.navigate("add_assignment/${course.code}")
+                                }) { Text("+Assignment") }
+                            }
                         }
                     }
                 }

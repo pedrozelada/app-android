@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.schedulemanagerapp.data.model.Test
-import com.example.schedulemanagerapp.ui.components.Routes
 import com.example.schedulemanagerapp.viewmodel.ScheduleViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -25,7 +24,7 @@ fun AddTestScreen(
     viewModel: ScheduleViewModel = hiltViewModel()
 ) {
     val courses by viewModel.courses.collectAsState()
-
+    var expanded by remember { mutableStateOf(false) }
     var selectedCourse by remember { mutableStateOf<String?>(null) }
     var topic by remember { mutableStateOf(TextFieldValue()) }
     var date by remember { mutableStateOf(TextFieldValue()) }
@@ -62,24 +61,40 @@ fun AddTestScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Course dropdown
+            // Course dropdown - Versión corregida
             ExposedDropdownMenuBox(
-                expanded = selectedCourse == null,
-                onExpandedChange = {}
+                expanded = expanded,
+                onExpandedChange = { expanded = it }
             ) {
-                Text(text = selectedCourse ?: "Select Course")
-                DropdownMenu(
-                    expanded = true,
-                    onDismissRequest = {}
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    readOnly = true,
+                    value = selectedCourse ?: "Select Course",
+                    onValueChange = {},
+                    label = { Text("Course") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    }
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
                 ) {
                     courses.forEach { course ->
                         DropdownMenuItem(
                             text = { Text(course.name) },
-                            onClick = { selectedCourse = course.code }
+                            onClick = {
+                                selectedCourse = course.code
+                                expanded = false
+                            }
                         )
                     }
                 }
             }
+
             OutlinedTextField(
                 value = topic,
                 onValueChange = { topic = it },
@@ -101,4 +116,3 @@ fun AddTestScreen(
         }
     }
 }
-
