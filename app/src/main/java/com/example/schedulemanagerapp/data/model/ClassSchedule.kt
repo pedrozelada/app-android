@@ -1,11 +1,9 @@
 package com.example.schedulemanagerapp.data.model
 
-import java.time.DayOfWeek
-import java.time.LocalTime
-
 data class ClassSchedule(
-    val courseCode: String,
-    val day: DayOfWeek,
-    val start: LocalTime,
-    val end: LocalTime
+    val courseCode: String = "",
+    val day: String = "MONDAY",
+    val start: String = "08:00",
+    val end: String = "09:00"
 )
+

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "803281805159",
+    "project_id": "schedulemanagerapp-39564",
+    "storage_bucket": "schedulemanagerapp-39564.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803281805159:android:cf59d2d1f21334207559c2",
+        "android_client_info": {
+          "package_name": "com.example.schedulemanagerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-CJmko_h9M2tWzgoJC0HwqepXZ4P2fYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

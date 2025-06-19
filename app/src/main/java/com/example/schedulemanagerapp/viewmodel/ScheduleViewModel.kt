@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +54,7 @@ class ScheduleViewModel @Inject constructor(
         }
     }
 
-    fun loadSchedulesByDay(day: java.time.DayOfWeek) {
+    fun loadSchedulesByDay(day: DayOfWeek) {
         viewModelScope.launch {
             _schedules.value = repository.getSchedulesByDay(day)
         }
@@ -82,7 +84,7 @@ class ScheduleViewModel @Inject constructor(
     fun addSchedule(schedule: ClassSchedule) {
         viewModelScope.launch {
             repository.addSchedule(schedule)
-            loadSchedulesByDay(schedule.day)
+            loadSchedulesByDay(DayOfWeek.valueOf(schedule.day))
         }
     }
 
@@ -92,8 +94,13 @@ class ScheduleViewModel @Inject constructor(
         viewModelScope.launch {
             _assignments.value = courses.value
                 .flatMap { repository.getAssignmentsByCourse(it.code) }
-                .filter { it.dueDate == today }
+                .filter {
+                    try {
+                        LocalDate.parse(it.dueDate) == today
+                    } catch (e: Exception) {
+                        false
+                    }
+                }
         }
     }
-
 }

@@ -35,7 +35,7 @@ fun AddAssignmentScreen(
                 try {
                     val date = LocalDate.parse(dueDate.text)
                     viewModel.addAssignment(
-                        Assignment(0, courseCode, description.text, date, completed = false)
+                        Assignment(0, courseCode, description.text, date.toString(), completed = false)
                     )
                     navController.popBackStack()
                 } catch (_: DateTimeParseException) {}

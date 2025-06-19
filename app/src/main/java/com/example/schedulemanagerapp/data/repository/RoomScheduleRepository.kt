@@ -22,9 +22,10 @@ class RoomScheduleRepository(
         db.courseDao().insert(CourseEntity(course.code, course.name, course.teacher))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getSchedulesByDay(day: DayOfWeek): List<ClassSchedule> =
         db.scheduleDao().getSchedulesByDay(day).first().map {
-            ClassSchedule(it.courseCode, it.day, it.start, it.end)
+            ClassSchedule(it.courseCode, it.day.toString(), it.start.toString(), it.end.toString())
         }
 
     override suspend fun addSchedule(schedule: ClassSchedule) {
@@ -44,9 +45,10 @@ class RoomScheduleRepository(
         db.testDao().insert(TestEntity(0, test.courseCode, test.topic, test.date, test.place))
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getAssignmentsByCourse(code: String): List<Assignment> =
         db.assignmentDao().getAssignmentsByCourse(code).first().map {
-            Assignment(it.id, it.courseCode, it.description, it.dueDate, it.completed)
+            Assignment(it.id, it.courseCode, it.description, it.dueDate.toString(), it.completed)
         }
 
     override suspend fun addAssignment(assignment: Assignment) {

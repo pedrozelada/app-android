@@ -43,7 +43,7 @@ fun AddTestScreen(
                 try {
                     val parsedDate = LocalDate.parse(date.text)
                     selectedCourse?.let {
-                        viewModel.addTest(Test(0, it, topic.text, parsedDate, place.text))
+                        viewModel.addTest(Test(0, it, topic.text, parsedDate.toString(), place.text))
                         navController.popBackStack()
                     }
                 } catch (e: DateTimeParseException) {

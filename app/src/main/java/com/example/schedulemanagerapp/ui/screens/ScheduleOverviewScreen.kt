@@ -48,14 +48,17 @@ fun ScheduleOverviewScreen(
             item { Spacer(Modifier.height(16.dp)) }
             item { Text("Tests", style = MaterialTheme.typography.titleMedium) }
             if (tests.isEmpty()) item { Text("No tests today.") }
-            else items(tests.filter { it.date == today }) { t ->
+            else items(tests.filter { try { LocalDate.parse(it.date) == today } catch (e: Exception) { false }
+            }) { t ->
                 Text("${t.courseCode} - ${t.topic} (${t.place})", style = MaterialTheme.typography.bodyMedium)
             }
 
             item { Spacer(Modifier.height(16.dp)) }
             item { Text("Assignments", style = MaterialTheme.typography.titleMedium) }
             if (assignments.isEmpty()) item { Text("No due assignments today.") }
-            else items(assignments.filter { it.dueDate == today }) { a ->
+            else items(assignments.filter {
+                try { LocalDate.parse(it.dueDate) == today } catch (e: Exception) { false }
+            }) { a ->
                 Text("${a.courseCode} - ${a.description}", style = MaterialTheme.typography.bodyMedium)
             }
         }

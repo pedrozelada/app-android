@@ -43,7 +43,9 @@ fun AddScheduleScreen(
                     val end = LocalTime.parse(endTime.text)
                     if (start >= end) return@FloatingActionButton
                     if (selectedCourse != null && selectedDay != null) {
-                        viewModel.addSchedule(ClassSchedule(selectedCourse!!, selectedDay!!, start, end))
+                        viewModel.addSchedule(ClassSchedule(selectedCourse!!,
+                            selectedDay!!.toString(), start.toString(), end.toString()
+                        ))
                         navController.popBackStack()
                     }
                 } catch (_: DateTimeParseException) {}

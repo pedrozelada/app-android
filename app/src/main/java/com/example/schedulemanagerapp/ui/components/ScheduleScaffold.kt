@@ -1,15 +1,15 @@
 package com.example.schedulemanagerapp.ui.components
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.filled.Event
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.schedulemanagerapp.ui.components.Routes
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -17,15 +17,23 @@ import kotlinx.coroutines.launch
 fun ScheduleScaffold(
     navController: NavController,
     content: @Composable () -> Unit
+
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val userEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text("Schedule Manager", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(16.dp))
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Schedule Manager", style = MaterialTheme.typography.titleLarge)
+                    if (userEmail.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(userEmail, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
                 NavigationDrawerItem(
                     label = { Text("Home") },
                     selected = false,
@@ -63,6 +71,19 @@ fun ScheduleScaffold(
                     selected = false,
                     onClick = { navController.navigate("daily_schedule/MONDAY") },
                     icon = { Icon(Icons.Default.DateRange, contentDescription = null) }
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Divider()
+                NavigationDrawerItem(
+                    label = { Text("Logout") },
+                    selected = false,
+                    onClick = {
+                        FirebaseAuth.getInstance().signOut()
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    icon = { Icon(Icons.Default.ExitToApp, contentDescription = null) }
                 )
             }
         }
